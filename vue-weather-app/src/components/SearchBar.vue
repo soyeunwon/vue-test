@@ -7,7 +7,12 @@
           type="search"
           placeholder="지역을 입력해주세요."
         />
-        <button @click="emits('onSearchCity', inputText)">
+        <button
+          @click="
+            $store.commit('onSearchCity', inputText);
+            $store.dispatch('getWeather');
+          "
+        >
           <font-awesome-icon class="icon" :icon="['fas', 'magnifying-glass']" />
         </button>
       </div>
@@ -19,7 +24,6 @@
 import { ref } from "vue";
 
 const inputText = ref("");
-const emits = defineEmits(["onSearchCity"]);
 </script>
 
 <style lang="scss" scoped>

@@ -1,35 +1,14 @@
 <script setup>
 import Navbar from "./components/Navbar.vue";
 import MainComp from "./components/MainComp.vue";
+import About from "./components/About.vue";
 import { ref, onMounted } from "vue";
+import { useStore } from "vuex";
 
-const weatherData = ref({
-  icon: "",
-  temp: 0,
-  text: "",
-  location: "",
-  city: "Seoul",
-});
-
-const getWeather = () => {
-  const API_URL = `https://api.openweathermap.org/data/2.5/weather?q=${weatherData.value.city}&appid=b736d08cae77c92b39322746d23c2c10`;
-
-  fetch(API_URL)
-    .then((res) => res.json())
-    .then((data) => {
-      weatherData.value.icon = data.weather[0].icon;
-      weatherData.value.temp = data.main.temp;
-      weatherData.value.text = data.weather[0].description;
-      weatherData.value.location = data.sys.country;
-      weatherData.value.city = data.name;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-};
+const store = useStore();
 
 onMounted(() => {
-  getWeather();
+  store.dispatch("getWeather");
 });
 
 const onSearchCity = (city) => {
@@ -39,6 +18,12 @@ const onSearchCity = (city) => {
 </script>
 
 <template>
+  <!-- <button @click="$store.dispatch('getWeather')">getWeather</button> -->
   <Navbar />
-  <MainComp :weatherData="weatherData" @onSearchCity="onSearchCity" />
+  <div v-if="!$store.state.toggle">
+    <MainComp />
+  </div>
+  <div v-else>
+    <About />
+  </div>
 </template>

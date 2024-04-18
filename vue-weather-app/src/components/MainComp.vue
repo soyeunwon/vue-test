@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <SearchBar @onSearchCity="onSearchCity" />
-    <WeatherInfo :weatherData="props.weatherData" />
+    <SearchBar />
+    <WeatherInfo />
   </div>
 </template>
 
@@ -9,15 +9,12 @@
 import WeatherInfo from "./WeatherInfo.vue";
 import SearchBar from "./SearchBar.vue";
 
-const props = defineProps({
-  weatherData: Object,
-});
+//vuex 전역 관리로 바꿈
+// const emits = defineEmits(["onSearchCity"]);
 
-const emits = defineEmits(["onSearchCity"]);
-
-const onSearchCity = (city) => {
-  emits("onSearchCity", city);
-};
+// const onSearchCity = (city) => {
+//   emits("onSearchCity", city);
+// };
 </script>
 
 <style scoped lang="scss"></style>
