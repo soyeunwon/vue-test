@@ -1,12 +1,19 @@
 <script setup>
 import { useStore } from "../store/pinia-store";
 import { storeToRefs } from "pinia";
+import { useQuery } from "@tanstack/vue-query";
 
 const store = useStore();
 const { weatherData } = storeToRefs(store);
+
+const { isLoading } = useQuery({
+  queryKey: ["weatherData", weatherData], // 함수로 변경
+  queryFn: store.fetchWeather,
+});
 </script>
 
 <template>
+  {{ weatherData.city }}
   <div class="weather-info">
     <div class="icon">
       <img

@@ -10,6 +10,7 @@ import {
   faLocationDot,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
+import { VueQueryPlugin } from "@tanstack/vue-query";
 
 library.add(faBarsStaggered, faLocationDot, faMagnifyingGlass);
 
@@ -18,5 +19,6 @@ const pinia = createPinia();
 createApp(App)
   // .use(store)
   .use(pinia)
+  .use(VueQueryPlugin)
   .component("font-awesome-icon", FontAwesomeIcon)
   .mount("#app");

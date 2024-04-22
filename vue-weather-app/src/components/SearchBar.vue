@@ -3,7 +3,8 @@ import { ref } from "vue";
 import { useStore } from "../store/pinia-store";
 
 const inputText = ref("");
-const { onSearchCity, getWeather } = useStore();
+
+const { onSearchCity } = useStore();
 </script>
 
 <template>
@@ -19,8 +20,7 @@ const { onSearchCity, getWeather } = useStore();
           @click="
             // $store.commit('onSearchCity', inputText);
             // $store.dispatch('getWeather');
-            onSearchCity(inputText);
-            getWeather();
+            onSearchCity(inputText)
           "
         >
           <font-awesome-icon class="icon" :icon="['fas', 'magnifying-glass']" />
