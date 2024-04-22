@@ -1,3 +1,11 @@
+<script setup>
+import { ref } from "vue";
+import { useStore } from "../store/pinia-store";
+
+const inputText = ref("");
+const { onSearchCity, getWeather } = useStore();
+</script>
+
 <template>
   <div class="search-bar">
     <form @submit.prevent>
@@ -9,8 +17,10 @@
         />
         <button
           @click="
-            $store.commit('onSearchCity', inputText);
-            $store.dispatch('getWeather');
+            // $store.commit('onSearchCity', inputText);
+            // $store.dispatch('getWeather');
+            onSearchCity(inputText);
+            getWeather();
           "
         >
           <font-awesome-icon class="icon" :icon="['fas', 'magnifying-glass']" />
@@ -19,12 +29,6 @@
     </form>
   </div>
 </template>
-
-<script setup>
-import { ref } from "vue";
-
-const inputText = ref("");
-</script>
 
 <style lang="scss" scoped>
 .search-bar {
