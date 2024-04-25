@@ -37,9 +37,9 @@ import { ref, computed, watchEffect } from 'vue';
 import PostItem from '@/components/posts/PostItem.vue';
 import { getPosts } from '@/api/posts';
 import { useRouter } from 'vue-router';
-import AppGrid from '@/components/posts/AppGrid.vue';
+
 import PostFilter from '@/components/posts/PostFilter.vue';
-import AppPagination from '@/components/posts/AppPagination.vue';
+
 import PostModal from '@/components/posts/PostModal.vue';
 
 const router = useRouter();

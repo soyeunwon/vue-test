@@ -9,8 +9,6 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import AppGrid from '@/components/posts/AppGrid.vue';
-import AppCard from '@/components/AppCard.vue';
 
 const router = useRouter();
 const items = ref([1, 2, 3, 4]);
