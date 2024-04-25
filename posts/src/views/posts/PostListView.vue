@@ -6,7 +6,6 @@
 	<hr class="my-4" />
 
 	<AppGrid :items="posts" v-slot="{ item }">
-		<!-- <template v-slot="{ item }"> -->
 		<PostItem
 			:title="item.title"
 			:content="item.content"
@@ -14,7 +13,6 @@
 			@click="goPage(item.id)"
 			@modal="openModal(item)"
 		/>
-		<!-- </template> -->
 	</AppGrid>
 
 	<AppPagination
@@ -24,27 +22,14 @@
 	/>
 	<hr class="my-5" />
 
-	<AppModal :show="show" title="게시글" @close="closeModal">
-		<template #default>
-			<div class="row g-3">
-				<div class="col-3 text-muted">제목</div>
-				<div class="col-9">{{ modalTitle }}</div>
-				<div class="col-3 text-muted">내용</div>
-				<div class="col-9">{{ modalContent }}</div>
-				<div class="col-3 text-muted">등록일</div>
-				<div class="col-9">{{ modalCreatedAt }}</div>
-			</div>
-		</template>
-		<template v-slot:actions>
-			<button type="button" class="btn btn-secondary" @click="closeModal">
-				닫기
-			</button>
-		</template>
-	</AppModal>
-
-	<!-- <AppCard>
-		<PostDetailView :id="2" />
-	</AppCard> -->
+	<Teleport to="#modal">
+		<PostModal
+			v-model="show"
+			:title="modalTitle"
+			:content="modalContent"
+			:created-at="modalCreatedAt"
+		/>
+	</Teleport>
 </template>
 
 <script setup>
@@ -55,7 +40,7 @@ import { useRouter } from 'vue-router';
 import AppGrid from '@/components/posts/AppGrid.vue';
 import PostFilter from '@/components/posts/PostFilter.vue';
 import AppPagination from '@/components/posts/AppPagination.vue';
-import AppModal from '@/components/AppModal.vue';
+import PostModal from '@/components/posts/PostModal.vue';
 
 const router = useRouter();
 const posts = ref([]);
@@ -104,10 +89,6 @@ const openModal = ({ title, content, createdAt }) => {
 	modalTitle.value = title;
 	modalContent.value = content;
 	modalCreatedAt.value = createdAt;
-};
-
-const closeModal = () => {
-	show.value = false;
 };
 </script>
 
