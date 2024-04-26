@@ -7,6 +7,7 @@
 					@input="$emit('update:title', $event.target.value)"
 					type="text"
 					class="form-control"
+					placeholder="제목으로 검색해주세요."
 				/>
 			</div>
 			<div class="col-3">

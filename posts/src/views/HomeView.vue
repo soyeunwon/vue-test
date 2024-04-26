@@ -1,7 +1,8 @@
 <template>
 	<h2>Home view</h2>
 	<button @click="goAbout" class="btn btn-primary my-4">어바웃으로 이동</button>
-	<AppGrid :items="items" v-slot="{ item }" col-class="col-6">
+	<hr class="my-4" />
+	<AppGrid :items="items" v-slot="{ item }">
 		<AppCard>{{ item }}</AppCard>
 	</AppGrid>
 </template>

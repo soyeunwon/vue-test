@@ -1,25 +1,30 @@
 <template>
 	<h2>게시글 목록</h2>
 	<hr class="my-4" />
-	<PostFilter v-model:title="params.title_like" v-model:limit="params.limit" />
-
+	<PostFilter v-model:title="params.title_like" v-model:limit="params._limit" />
 	<hr class="my-4" />
 
-	<AppGrid :items="posts" v-slot="{ item }">
-		<PostItem
-			:title="item.title"
-			:content="item.content"
-			:created-at="item.createdAt"
-			@click="goPage(item.id)"
-			@modal="openModal(item)"
-		/>
-	</AppGrid>
+	<AppLoading v-if="loading" />
+	<AppError v-else-if="error" :message="error.message" />
 
-	<AppPagination
-		:current-page="params._page"
-		:page-count="pageCount"
-		@page="page => (params._page = page)"
-	/>
+	<template v-else>
+		<AppGrid :items="posts" v-slot="{ item }">
+			<PostItem
+				:title="item.title"
+				:content="item.content"
+				:created-at="item.createdAt"
+				@click="goPage(item.id)"
+				@modal="openModal(item)"
+			/>
+		</AppGrid>
+
+		<AppPagination
+			:current-page="params._page"
+			:page-count="pageCount"
+			@page="page => (params._page = page)"
+		/>
+	</template>
+
 	<hr class="my-5" />
 
 	<Teleport to="#modal">
@@ -33,17 +38,16 @@
 </template>
 
 <script setup>
-import { ref, computed, watchEffect } from 'vue';
+import { ref, computed } from 'vue';
 import PostItem from '@/components/posts/PostItem.vue';
-import { getPosts } from '@/api/posts';
 import { useRouter } from 'vue-router';
-
 import PostFilter from '@/components/posts/PostFilter.vue';
-
 import PostModal from '@/components/posts/PostModal.vue';
+import AppLoading from '@/components/app/AppLoading.vue';
+import AppError from '@/components/app/AppError.vue';
+import { useAxios } from '@/hooks/useAxios';
 
 const router = useRouter();
-const posts = ref([]);
 
 const params = ref({
 	_sort: 'createdAt',
@@ -53,32 +57,20 @@ const params = ref({
 	title_like: '',
 });
 
+const {
+	response,
+	data: posts,
+	error,
+	loading,
+} = useAxios('/posts', { method: 'get', params });
+
 //pagination
-const totalCount = ref(0);
+const totalCount = computed(() => response.value.headers['x-total-count']);
 const pageCount = computed(() =>
 	Math.ceil(totalCount.value / params.value._limit),
 );
 
-const fetchPosts = async () => {
-	try {
-		const { data, headers } = await getPosts(params.value);
-		posts.value = data;
-		totalCount.value = headers['x-total-count'];
-		// ({ data: posts.value } = await getPosts());
-	} catch (error) {
-		console.error(error);
-	}
-};
-
-const goPage = id => {
-	router.push({
-		name: 'PostDetail',
-		params: { id },
-	});
-};
-
-watchEffect(fetchPosts);
-
+//modal
 const show = ref(false);
 const modalTitle = ref('');
 const modalContent = ref('');
@@ -89,6 +81,13 @@ const openModal = ({ title, content, createdAt }) => {
 	modalTitle.value = title;
 	modalContent.value = content;
 	modalCreatedAt.value = createdAt;
+};
+
+const goPage = id => {
+	router.push({
+		name: 'PostDetail',
+		params: { id },
+	});
 };
 </script>
 
