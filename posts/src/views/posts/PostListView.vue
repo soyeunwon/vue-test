@@ -1,14 +1,26 @@
 <template>
 	<h2>게시글 목록</h2>
 	<hr class="my-4" />
-	<PostFilter v-model:title="params.title_like" v-model:limit="params._limit" />
+	<PostFilter
+		v-model:title="params.title_like"
+		:limit="params._limit"
+		@update:limit="changeLimit"
+	/>
 	<hr class="my-4" />
 
 	<AppLoading v-if="loading" />
 	<AppError v-else-if="error" :message="error.message" />
 
+	<template v-else-if="!isExist">
+		<p class="text-center py-5 text-muted">No Results</p>
+	</template>
+
 	<template v-else>
-		<AppGrid :items="posts" v-slot="{ item }">
+		<AppGrid
+			:items="posts"
+			v-slot="{ item }"
+			col-class="col-12 col-sm-5 col-md-4 col-lg-3"
+		>
 			<PostItem
 				:title="item.title"
 				:content="item.content"
@@ -36,6 +48,8 @@
 			:created-at="modalCreatedAt"
 		/>
 	</Teleport>
+
+	{{ params }}
 
 	<template v-if="previewId">
 		<AppCard>
@@ -69,12 +83,19 @@ const params = ref({
 	title_like: '',
 });
 
+const changeLimit = value => {
+	params.value._limit = value;
+	params.value._page = 1;
+};
+
 const {
 	response,
 	data: posts,
 	error,
 	loading,
-} = useAxios('/posts', { method: 'get', params });
+} = useAxios('/posts', { params });
+
+const isExist = computed(() => posts.value && posts.value.length > 0);
 
 //pagination
 const totalCount = computed(() => response.value.headers['x-total-count']);

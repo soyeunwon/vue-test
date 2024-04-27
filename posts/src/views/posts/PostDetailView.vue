@@ -50,7 +50,7 @@
 
 <script setup>
 import { computed, toRef } from 'vue';
-import { useRouter } from 'vue-router';
+import { onBeforeRouteLeave, onBeforeRouteUpdate, useRouter } from 'vue-router';
 import { useAlert } from '@/composables/alert';
 import AppError from '@/components/app/AppError.vue';
 import { useAxios } from '@/hooks/useAxios';
@@ -99,6 +99,14 @@ const remove = async () => {
 const goListPage = () => router.push({ name: 'PostList' });
 const goEditPage = () =>
 	router.push({ name: 'PostEdit', params: { id: props.id } });
+
+onBeforeRouteUpdate(() => {
+	console.log('onBeforeRouteUpdate');
+});
+
+onBeforeRouteLeave(() => {
+	console.log('onBeforeRouteLeave');
+});
 </script>
 
 <style lang="scss" scoped></style>

@@ -9,6 +9,7 @@ import NotFoundView from '@/views/NotFoundView.vue';
 import NestedView from '@/views/nested/NestedView.vue';
 import Nested1View from '@/views/nested/Nested1View.vue';
 import Nested2View from '@/views/nested/Nested2View.vue';
+import MyPage from '@/views/MyPage.vue';
 
 const routes = [
 	{ path: '/', name: 'Home', component: HomeView },
@@ -33,11 +34,34 @@ const routes = [
 			{ path: 'two', name: 'Nested2', component: Nested2View },
 		],
 	},
+	{
+		path: '/my',
+		name: 'MyPage',
+		component: MyPage,
+		beforeEnter: (to, from) => {
+			console.log('to:', to);
+			console.log('이동전from:', from);
+			// return false;
+			// return { name: 'Home' };
+			removeQueryString(to);
+		},
+	},
 ];
+
+function removeQueryString(to) {
+	if (Object.keys(to.query).length > 0) {
+		return { path: to.path, query: {} };
+	}
+}
 
 const router = createRouter({
 	history: createWebHistory('/'),
 	routes,
 });
+
+// router.beforeEach((to, from) => {
+// 	console.log('to:', to);
+// 	console.log('이동전from:', from);
+// });
 
 export default router;
